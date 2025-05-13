@@ -1,6 +1,8 @@
 
 using System.Reflection;
 using AutoMapperExample.DTOs;
+using AutoMapperExample.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoMapperExample
@@ -15,6 +17,7 @@ namespace AutoMapperExample
 
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            builder.Services.AddScoped<IValidator<ItemDTO>, ItemDTOValidator>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

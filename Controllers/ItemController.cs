@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapperExample.DTOs;
 using AutoMapperExample.Models;
+using AutoMapperExample.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +18,12 @@ namespace AutoMapperExample.Controllers
             new Item { Id = 2, Name = "Item2", Description = "This is Item 2" }
         };
         private readonly IMapper _mapper;
-        
-        public ItemController(IMapper mapper)
+        private readonly IValidator<ItemDTO> _validator;
+
+        public ItemController(IMapper mapper,IValidator<ItemDTO> validator)
         {
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -45,6 +49,11 @@ namespace AutoMapperExample.Controllers
         [HttpPost]
         public ActionResult<ItemDTO> Create(ItemDTO newItemDTO)
         {
+            var validationResult = _validator.Validate(newItemDTO);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             if (_items.Any(i => i.Id == newItemDTO.Id))
             {
                 return BadRequest($"Item with ID {newItemDTO.Id} already exists.");
@@ -59,6 +68,11 @@ namespace AutoMapperExample.Controllers
         [HttpPut("{id}")]
         public ActionResult<ItemDTO> Update(int id, ItemDTO updatedItemDTO)
         {
+            var validationResult = _validator.Validate(updatedItemDTO);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             var item = _items.FirstOrDefault(i => i.Id == id);
             if (item == null)
             {
