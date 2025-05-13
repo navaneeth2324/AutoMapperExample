@@ -1,4 +1,4 @@
-# AutoMapperExample# AutoMapperExample
+# AutoMapperExample
 
 This project demonstrates how to use [AutoMapper](https://automapper.org/) in an ASP.NET Core Web API (.NET 8, C# 12) to map between domain models and Data Transfer Objects (DTOs). It also includes Swagger/OpenAPI integration for easy API exploration.
 
